@@ -16,6 +16,14 @@ variable parameters {
 			initial_agent_pool_count = number
 			initial_agent_pool_name = string
 			initial_agent_pool_vm_sku_name = string
+			ip_address_pool_1_name = string
+			ip_address_pool_1_value = string
+			ip_address_pool_2_name = string
+			ip_address_pool_2_value = string
+			ip_address_pool_3_name = string
+			ip_address_pool_3_value = string
+			ip_address_pool_4_name = string
+			ip_address_pool_4_value = string
 			kubernetes_version = string
 			naks_cluster_name = string
 			pod_cidrs = list(string)
