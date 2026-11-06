@@ -20,6 +20,14 @@ locals {
 		initial_agent_pool_count = local.naks_cluster.initial_agent_pool_count
 		initial_agent_pool_name = local.naks_cluster.initial_agent_pool_name
 		initial_agent_pool_vm_sku_name = local.naks_cluster.initial_agent_pool_vm_sku_name
+		ip_address_pool_1_name = local.naks_cluster.ip_address_pool_1_name
+		ip_address_pool_1_value = local.naks_cluster.ip_address_pool_1_value
+		ip_address_pool_2_name = local.naks_cluster.ip_address_pool_2_name
+		ip_address_pool_2_value = local.naks_cluster.ip_address_pool_2_value
+		ip_address_pool_3_name = local.naks_cluster.ip_address_pool_3_name
+		ip_address_pool_3_value = local.naks_cluster.ip_address_pool_3_value
+		ip_address_pool_4_name = local.naks_cluster.ip_address_pool_4_name
+		ip_address_pool_4_value = local.naks_cluster.ip_address_pool_4_value
 		kubernetes_version = local.naks_cluster.kubernetes_version
 		l3_mgmt_cni_name = local.fabric.l3_mgmt_cni_name
 		l3_test_cni_name = local.fabric.l3_test_cni_name

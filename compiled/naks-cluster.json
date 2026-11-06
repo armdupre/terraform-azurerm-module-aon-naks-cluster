@@ -1,0 +1,210 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.48.1.52935",
+      "templateHash": "12378358116139986608"
+    }
+  },
+  "parameters": {
+    "admin_group_object_ids": {
+      "type": "array"
+    },
+    "admin_username": {
+      "type": "string"
+    },
+    "control_plane_count": {
+      "type": "int"
+    },
+    "control_plane_vm_sku_name": {
+      "type": "string"
+    },
+    "csn_name": {
+      "type": "string"
+    },
+    "custom_location_name": {
+      "type": "string"
+    },
+    "custom_location_rg_name": {
+      "type": "string"
+    },
+    "dns_service_ip": {
+      "type": "string"
+    },
+    "ip_address_pool_1_name": {
+      "type": "string"
+    },
+    "ip_address_pool_1_value": {
+      "type": "string"
+    },
+    "ip_address_pool_2_name": {
+      "type": "string"
+    },
+    "ip_address_pool_2_value": {
+      "type": "string"
+    },
+    "ip_address_pool_3_name": {
+      "type": "string"
+    },
+    "ip_address_pool_3_value": {
+      "type": "string"
+    },
+    "ip_address_pool_4_name": {
+      "type": "string"
+    },
+    "ip_address_pool_4_value": {
+      "type": "string"
+    },
+    "initial_agent_pool_count": {
+      "type": "int"
+    },
+    "initial_agent_pool_name": {
+      "type": "string"
+    },
+    "initial_agent_pool_vm_sku_name": {
+      "type": "string"
+    },
+    "kubernetes_version": {
+      "type": "string"
+    },
+    "l3_mgmt_cni_name": {
+      "type": "string"
+    },
+    "l3_test_cni_name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "naks_cluster_name": {
+      "type": "string"
+    },
+    "pod_cidrs": {
+      "type": "array"
+    },
+    "service_cidrs": {
+      "type": "array"
+    },
+    "ssh_public_key": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.NetworkCloud/kubernetesClusters",
+      "apiVersion": "2026-01-01-preview",
+      "name": "[parameters('naks_cluster_name')]",
+      "location": "[parameters('location')]",
+      "extendedLocation": {
+        "name": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('custom_location_rg_name')), 'Microsoft.ExtendedLocation/customLocations', parameters('custom_location_name'))]",
+        "type": "CustomLocation"
+      },
+      "properties": {
+        "kubernetesVersion": "[parameters('kubernetes_version')]",
+        "aadConfiguration": {
+          "adminGroupObjectIds": "[parameters('admin_group_object_ids')]"
+        },
+        "administratorConfiguration": {
+          "adminUsername": "[parameters('admin_username')]",
+          "sshPublicKeys": [
+            {
+              "keyData": "[parameters('ssh_public_key')]"
+            }
+          ]
+        },
+        "controlPlaneNodeConfiguration": {
+          "count": "[parameters('control_plane_count')]",
+          "vmSkuName": "[parameters('control_plane_vm_sku_name')]",
+          "administratorConfiguration": {
+            "adminUsername": "[parameters('admin_username')]",
+            "sshPublicKeys": [
+              {
+                "keyData": "[parameters('ssh_public_key')]"
+              }
+            ]
+          }
+        },
+        "initialAgentPoolConfigurations": [
+          {
+            "name": "[parameters('initial_agent_pool_name')]",
+            "mode": "System",
+            "count": "[parameters('initial_agent_pool_count')]",
+            "vmSkuName": "[parameters('initial_agent_pool_vm_sku_name')]",
+            "agentOptions": {
+              "hugepagesCount": 2,
+              "hugepagesSize": "1G"
+            },
+            "administratorConfiguration": {
+              "adminUsername": "[parameters('admin_username')]",
+              "sshPublicKeys": [
+                {
+                  "keyData": "[parameters('ssh_public_key')]"
+                }
+              ]
+            }
+          }
+        ],
+        "networkConfiguration": {
+          "cloudServicesNetworkId": "[resourceId('Microsoft.NetworkCloud/cloudServicesNetworks', parameters('csn_name'))]",
+          "cniNetworkId": "[resourceId('Microsoft.NetworkCloud/l3Networks', parameters('l3_mgmt_cni_name'))]",
+          "podCidrs": "[parameters('pod_cidrs')]",
+          "serviceCidrs": "[parameters('service_cidrs')]",
+          "dnsServiceIp": "[parameters('dns_service_ip')]",
+          "attachedNetworkConfiguration": {
+            "l3Networks": [
+              {
+                "ipamEnabled": "True",
+                "networkId": "[resourceId('Microsoft.NetworkCloud/l3Networks', parameters('l3_test_cni_name'))]",
+                "pluginType": "SRIOV"
+              }
+            ]
+          },
+          "bgpServiceLoadBalancerConfiguration": {
+            "bgpAdvertisements": [],
+            "bgpPeers": [],
+            "fabricPeeringEnabled": "True",
+            "ipAddressPools": [
+              {
+                "name": "[parameters('ip_address_pool_1_name')]",
+                "addresses": [
+                  "[parameters('ip_address_pool_1_value')]"
+                ],
+                "autoAssign": "True"
+              },
+              {
+                "name": "[parameters('ip_address_pool_2_name')]",
+                "addresses": [
+                  "[parameters('ip_address_pool_2_value')]"
+                ],
+                "autoAssign": "True"
+              },
+              {
+                "name": "[parameters('ip_address_pool_3_name')]",
+                "addresses": [
+                  "[parameters('ip_address_pool_3_value')]"
+                ],
+                "autoAssign": "True"
+              },
+              {
+                "name": "[parameters('ip_address_pool_4_name')]",
+                "addresses": [
+                  "[parameters('ip_address_pool_4_value')]"
+                ],
+                "autoAssign": "True"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "managed_rg_name": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.NetworkCloud/kubernetesClusters', parameters('naks_cluster_name')), '2026-01-01-preview').managedResourceGroupConfiguration.name]"
+    }
+  }
+}
